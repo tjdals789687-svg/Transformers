@@ -19,44 +19,255 @@ Hugging Face Transformers와 Coqui TTS를 활용한 웹 기반 번역 및 음성
 
 ## 📋 요구사항
 
-- Python 3.8 이상
-- 충분한 디스크 공간 (모델 다운로드용)
+- **Python 3.9 ~ 3.11** (⚠️ 중요: TTS는 Python 3.12 이상에서 작동 안 함!)
+- 충분한 디스크 공간 (모델 다운로드용, 약 2-3GB)
+- 인터넷 연결 (최초 모델 다운로드용)
 
-## 🚀 설치 및 실행
+---
 
-### 1. 저장소 클론
+## 🚀 설치 및 실행 (초보자용 상세 가이드)
+
+### ⚠️ 시작하기 전에 - Python 버전 확인
+
+**1단계: Python 버전 확인**
+
+**Windows (명령 프롬프트 또는 PowerShell):**
+```bash
+python --version
+```
+
+**Mac/Linux (터미널):**
+```bash
+python3 --version
+```
+
+**결과 확인:**
+- ✅ `Python 3.9.x` ~ `Python 3.11.x` → 그대로 진행!
+- ❌ `Python 3.12.x` 이상 → 아래 "Python 3.11 설치" 섹션 참고
+- ❌ `Python 3.8.x` 이하 → Python 업그레이드 필요
+
+---
+
+### 🐍 Python 3.11 설치 (Python 3.12 이상인 경우)
+
+#### Windows 사용자:
+
+**1. Python 3.11.9 다운로드**
+- https://www.python.org/downloads/release/python-3119/
+- 페이지 맨 아래 **Windows installer (64-bit)** 클릭
+
+**2. 설치 시 주의사항**
+- ⚠️ **"Add Python to PATH" 체크 해제** (기존 Python과 충돌 방지)
+- "Customize installation" 클릭
+- 설치 경로 기억하기 (예: `C:\Python311\`)
+
+**3. 설치 확인**
+```bash
+py -3.11 --version
+```
+→ `Python 3.11.9`가 나오면 성공!
+
+#### Mac 사용자:
+
+**Homebrew 사용:**
+```bash
+brew install python@3.11
+```
+
+**설치 확인:**
+```bash
+python3.11 --version
+```
+
+---
+
+## 📥 프로젝트 다운로드
+
+### 방법 1: ZIP 파일 다운로드 (초보자 추천)
+
+1. 이 프로젝트의 GitHub 페이지에서 **Code** 버튼 클릭
+2. **Download ZIP** 클릭
+3. 다운로드한 파일을 원하는 위치에 압축 해제
+4. 압축 해제한 폴더로 이동
+
+### 방법 2: Git으로 클론
 
 ```bash
 git clone https://github.com/yourusername/translator-tts.git
 cd translator-tts
 ```
 
-### 2. 가상환경 생성 (권장)
+---
 
+## 🔧 가상환경 설정 및 실행 (상세 가이드)
+
+가상환경을 사용하면 다른 Python 프로젝트와 충돌 없이 깔끔하게 관리할 수 있어요! 💪
+
+### Windows 사용자
+
+**1단계: 명령 프롬프트(CMD) 또는 PowerShell 열기**
+- `Win + R` → `cmd` 입력 → Enter
+- 또는 프로젝트 폴더에서 주소창에 `cmd` 입력
+
+**2단계: 프로젝트 폴더로 이동**
 ```bash
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+cd C:\Users\사용자명\Desktop\translator-tts
+```
+💡 팁: 폴더를 CMD 창으로 드래그하면 경로가 자동 입력됩니다!
+
+**3단계: 가상환경 생성**
+
+**Python 3.12 이상이 설치된 경우:**
+```bash
+py -3.11 -m venv venv
 ```
 
-### 3. 의존성 패키지 설치
+**Python 3.9~3.11만 설치된 경우:**
+```bash
+python -m venv venv
+```
 
+→ `venv` 폴더가 생성되면 성공! (1-2분 소요)
+
+**4단계: 가상환경 활성화**
+```bash
+venv\Scripts\activate
+```
+
+✅ 성공 시: 프롬프트 앞에 `(venv)`가 표시됩니다
+```
+(venv) C:\Users\사용자명\Desktop\translator-tts>
+```
+
+**5단계: 필요한 패키지 설치**
+```bash
+pip install flask transformers torch sentencepiece protobuf TTS sacremoses
+```
+→ 5-10분 정도 걸립니다. 커피 한 잔 하고 오세요! ☕
+
+또는 requirements.txt 사용:
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. 애플리케이션 실행
-
+**6단계: 애플리케이션 실행**
 ```bash
 python app.py
 ```
 
-### 5. 브라우저에서 접속
+✅ 성공 메시지:
+```
+ * Running on http://127.0.0.1:5000
+```
 
+**7단계: 브라우저에서 열기**
+- 브라우저 주소창에 입력: `http://localhost:5000`
+
+**8단계: 종료 및 가상환경 비활성화**
+- 서버 종료: `Ctrl + C`
+- 가상환경 종료: `deactivate`
+
+---
+
+### Mac/Linux 사용자
+
+**1단계: 터미널 열기**
+- `Cmd + Space` → "Terminal" 검색
+
+**2단계: 프로젝트 폴더로 이동**
+```bash
+cd ~/Desktop/translator-tts
 ```
-http://localhost:5000
+
+**3단계: 가상환경 생성**
+
+**Python 3.12 이상이 설치된 경우:**
+```bash
+python3.11 -m venv venv
 ```
+
+**Python 3.9~3.11만 설치된 경우:**
+```bash
+python3 -m venv venv
+```
+
+**4단계: 가상환경 활성화**
+```bash
+source venv/bin/activate
+```
+
+✅ 성공 시: 프롬프트 앞에 `(venv)`가 표시됩니다
+
+**5단계: 필요한 패키지 설치**
+```bash
+pip install flask transformers torch sentencepiece protobuf TTS sacremoses
+```
+
+또는:
+```bash
+pip install -r requirements.txt
+```
+
+**6단계: 애플리케이션 실행**
+```bash
+python app.py
+```
+
+**7단계: 브라우저에서 열기**
+- `http://localhost:5000`
+
+**8단계: 종료**
+- 서버 종료: `Ctrl + C`
+- 가상환경 종료: `deactivate`
+
+---
+
+## 🎮 다음 번 실행할 때 (간단)
+
+**Windows:**
+```bash
+cd translator-tts
+venv\Scripts\activate
+python app.py
+```
+
+**Mac/Linux:**
+```bash
+cd translator-tts
+source venv/bin/activate
+python app.py
+```
+
+---
+
+## 🚀 더 쉬운 실행 방법 - 실행 스크립트 사용
+
+프로젝트에 포함된 스크립트를 사용하면 더 쉽게 실행할 수 있어요!
+
+**Windows:**
+```bash
+run.bat
+```
+→ 더블클릭으로도 실행 가능!
+
+**Mac/Linux:**
+```bash
+chmod +x run.sh  # 최초 1회만 실행
+./run.sh
+```
+
+---
 
 ## 📖 사용 방법
+
+### 첫 실행 시 (중요!)
+
+⏰ **첫 번째 번역은 시간이 걸립니다!**
+- 번역 모델이 자동으로 다운로드됩니다 (약 300MB)
+- 2-5분 정도 기다려주세요
+- 이후에는 빠르게 작동합니다!
+
+### 기본 사용법
 
 1. **언어 선택**: 원본 언어와 번역할 언어를 선택합니다
 2. **텍스트 입력**: 번역할 텍스트를 입력합니다 (최대 500자)
@@ -69,6 +280,12 @@ http://localhost:5000
 - `Ctrl + Enter` (또는 `Cmd + Enter`): 번역 실행
 - 언어 스왑 버튼 (⇄): 원본 언어와 번역 언어를 서로 바꿉니다
 
+### 💡 팁
+
+- 짧은 문장이 더 정확하게 번역됩니다
+- 처음 사용하는 언어 쌍은 모델 다운로드로 시간이 걸립니다
+- 오디오 파일은 `static/audio/` 폴더에 저장됩니다
+
 ## 🌍 지원 언어
 
 - 영어 (en)
@@ -79,13 +296,85 @@ http://localhost:5000
 - 일본어 (ja)
 - 중국어 (zh)
 
+## 🎓 가상환경 관리 팁
+
+### 가상환경이란?
+
+가상환경은 프로젝트마다 독립적인 Python 환경을 만드는 기능입니다.
+
+**장점:**
+- ✅ 프로젝트별로 다른 패키지 버전 사용 가능
+- ✅ 다른 프로젝트와 충돌 없음
+- ✅ 시스템 Python을 깨끗하게 유지
+- ✅ 삭제도 쉬움 (폴더만 지우면 됨)
+
+### 자주 사용하는 명령어
+
+```bash
+# 가상환경 활성화 (Windows)
+venv\Scripts\activate
+
+# 가상환경 활성화 (Mac/Linux)
+source venv/bin/activate
+
+# 가상환경 비활성화
+deactivate
+
+# 설치된 패키지 목록 보기
+pip list
+
+# 패키지 제거
+pip uninstall 패키지명
+
+# 현재 환경의 패키지를 requirements.txt로 저장
+pip freeze > requirements.txt
+```
+
+### 가상환경 삭제
+
+프로젝트가 망가졌다면 가상환경을 삭제하고 다시 만드세요:
+
+**Windows:**
+```bash
+# 가상환경 비활성화
+deactivate
+
+# venv 폴더 삭제
+rmdir /s venv
+
+# 가상환경 재생성
+py -3.11 -m venv venv
+venv\Scripts\activate
+pip install flask transformers torch sentencepiece protobuf TTS sacremoses
+```
+
+**Mac/Linux:**
+```bash
+deactivate
+rm -rf venv
+python3.11 -m venv venv
+source venv/bin/activate
+pip install flask transformers torch sentencepiece protobuf TTS sacremoses
+```
+
+---
+
 ## 📁 프로젝트 구조
 
 ```
 translator-tts/
 ├── app.py                 # Flask 메인 애플리케이션
 ├── requirements.txt       # Python 의존성 패키지
-├── README.md             # 프로젝트 문서
+├── README.md             # 프로젝트 문서 (이 파일!)
+├── DEPLOYMENT.md         # 배포 가이드
+├── .gitignore            # Git 무시 파일 목록
+├── run.sh                # Linux/Mac 실행 스크립트
+├── run.bat               # Windows 실행 배치 파일
+├── venv/                 # ⭐ 가상환경 폴더 (생성 후)
+│   ├── Scripts/          # (Windows) 실행 파일들
+│   ├── bin/              # (Mac/Linux) 실행 파일들
+│   ├── Lib/              # 설치된 패키지들
+│   └── ...
 ├── templates/
 │   └── index.html        # 메인 HTML 템플릿
 ├── static/
@@ -94,8 +383,18 @@ translator-tts/
 │   ├── js/
 │   │   └── script.js     # JavaScript
 │   └── audio/            # 생성된 오디오 파일 저장
-└── .gitignore            # Git 무시 파일 목록
+└── .git/                 # Git 저장소 (git init 후)
 ```
+
+**폴더 설명:**
+- `venv/`: 가상환경 폴더 (`.gitignore`에 포함되어 Git에 업로드 안 됨)
+- `static/audio/`: 음성 합성 결과물 저장 (자동 생성)
+- `templates/`: Flask HTML 템플릿
+- `static/`: CSS, JavaScript, 정적 파일
+
+**주의:** `venv/` 폴더는 GitHub에 올리면 안 됩니다! (`.gitignore`에 자동 추가됨)
+
+---
 
 ## ⚙️ 설정
 
@@ -118,20 +417,165 @@ tts = TTS(model_name="tts_models/en/ljspeech/tacotron2-DDC")
 tts = TTS(model_name="tts_models/ko/cv/vits")
 ```
 
-## 🔧 문제 해결
+## 🔧 문제 해결 (자주 묻는 질문)
 
-### 모델 다운로드가 느린 경우
+### ❌ 문제 1: "Could not find a version that satisfies the requirement TTS"
 
-처음 실행 시 모델이 자동으로 다운로드됩니다. 시간이 걸릴 수 있으니 기다려주세요.
+**원인:** Python 버전이 3.12 이상입니다.
 
-### 메모리 부족 오류
+**해결책:**
+```bash
+# Python 버전 확인
+python --version
 
-- 가벼운 모델 사용 검토
-- 시스템 메모리 확인 및 증설 고려
+# Python 3.11 설치 후 가상환경 재생성
+py -3.11 -m venv venv
+venv\Scripts\activate
+pip install flask transformers torch sentencepiece protobuf TTS sacremoses
+```
 
-### 특정 언어 쌍이 작동하지 않는 경우
+**대안:** TTS 없이 번역만 사용하기
+```bash
+pip install flask transformers torch sentencepiece protobuf sacremoses
+```
+→ `app.py`에서 TTS 관련 코드 주석 처리 필요
 
-모든 언어 쌍이 지원되지 않을 수 있습니다. [Helsinki-NLP 모델 페이지](https://huggingface.co/Helsinki-NLP)에서 사용 가능한 모델을 확인하세요.
+---
+
+### ❌ 문제 2: "torch==2.1.0을 찾을 수 없습니다"
+
+**원인:** 오래된 버전 번호가 requirements.txt에 있습니다.
+
+**해결책:**
+```bash
+pip install flask transformers torch sentencepiece protobuf TTS sacremoses
+```
+→ 버전 지정 없이 최신 버전 설치
+
+---
+
+### ❌ 문제 3: "pip: command not found"
+
+**원인:** Python이 제대로 설치되지 않았거나 PATH 설정 문제
+
+**해결책:**
+1. Python 재설치 (설치 시 "Add Python to PATH" 체크)
+2. 또는 전체 경로 사용:
+```bash
+# Windows
+C:\Python311\python.exe -m pip install ...
+
+# Mac
+/usr/local/bin/python3 -m pip install ...
+```
+
+---
+
+### ❌ 문제 4: 가상환경 활성화가 안 됩니다
+
+**Windows에서 "스크립트 실행 금지" 오류:**
+
+**해결책:** PowerShell을 관리자 권한으로 실행 후:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+그 후 다시 시도:
+```bash
+venv\Scripts\activate
+```
+
+**Mac/Linux에서 권한 오류:**
+```bash
+chmod +x venv/bin/activate
+source venv/bin/activate
+```
+
+---
+
+### ❌ 문제 5: 모델 다운로드가 너무 느립니다
+
+**해결책:**
+- 인터넷 연결 확인
+- 시간이 걸리는 게 정상입니다 (첫 실행 시 5-10분)
+- 다운로드 중에 터미널 창을 닫지 마세요!
+
+---
+
+### ❌ 문제 6: "Address already in use" 오류
+
+**원인:** 5000번 포트가 이미 사용 중입니다.
+
+**해결책 1:** 다른 포트 사용
+```bash
+# app.py 수정 또는 실행 시 환경 변수 설정
+set PORT=5001  # Windows
+export PORT=5001  # Mac/Linux
+python app.py
+```
+
+**해결책 2:** 사용 중인 프로세스 종료
+```bash
+# Windows
+netstat -ano | findstr :5000
+taskkill /PID [프로세스번호] /F
+
+# Mac/Linux
+lsof -ti:5000 | xargs kill -9
+```
+
+---
+
+### ❌ 문제 7: 번역이 너무 느립니다
+
+**원인:** CPU로 추론하면 느릴 수 있습니다.
+
+**해결책:**
+- 첫 번역은 모델 로딩으로 느립니다 (정상)
+- 이후 번역은 빨라집니다
+- GPU가 있다면 CUDA 버전 PyTorch 설치 고려
+
+---
+
+### ❌ 문제 8: 특정 언어 쌍이 작동하지 않습니다
+
+**원인:** 모든 언어 쌍이 지원되지 않을 수 있습니다.
+
+**해결책:**
+- [Helsinki-NLP 모델 페이지](https://huggingface.co/Helsinki-NLP)에서 사용 가능한 모델 확인
+- 영어를 중간 언어로 사용 (예: 한국어→영어→스페인어)
+
+---
+
+### ❌ 문제 9: "Microsoft Visual C++ 14.0 is required"
+
+**원인:** Windows에서 일부 패키지 컴파일에 필요한 도구 부족
+
+**해결책:**
+1. https://visualstudio.microsoft.com/visual-cpp-build-tools/
+2. "Desktop development with C++" 선택 설치
+3. 설치 후 다시 pip install 시도
+
+---
+
+### ❌ 문제 10: 메모리 부족 오류
+
+**원인:** 시스템 RAM이 부족합니다.
+
+**해결책:**
+- 다른 프로그램 종료
+- 더 작은 모델 사용
+- swap 파일 크기 증가 (OS 설정)
+
+---
+
+### 💡 추가 도움이 필요하면
+
+1. **에러 메시지 전체**를 복사해서 검색
+2. GitHub Issues에 질문 등록
+3. 터미널 출력을 스크린샷으로 찍어서 공유
+
+---
 
 ## 📝 주의사항
 
