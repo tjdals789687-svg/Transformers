@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 번역기 with TTS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌐 AI 번역기 & 음성 합성</h1>
+            <p>Hugging Face Transformers + Coqui TTS</p>
+        </header>
+
+        <div class="translator-container">
+            <!-- 언어 선택 -->
+            <div class="language-selector">
+                <div class="language-group">
+                    <label for="source-lang">원본 언어</label>
+                    <select id="source-lang">
+                        <option value="en">영어</option>
+                        <option value="ko">한국어</option>
+                        <option value="es">스페인어</option>
+                        <option value="fr">프랑스어</option>
+                        <option value="de">독일어</option>
+                        <option value="ja">일본어</option>
+                        <option value="zh">중국어</option>
+                    </select>
+                </div>
+                
+                <button id="swap-languages" class="swap-btn">⇄</button>
+                
+                <div class="language-group">
+                    <label for="target-lang">번역 언어</label>
+                    <select id="target-lang">
+                        <option value="ko">한국어</option>
+                        <option value="en">영어</option>
+                        <option value="es">스페인어</option>
+                        <option value="fr">프랑스어</option>
+                        <option value="de">독일어</option>
+                        <option value="ja">일본어</option>
+                        <option value="zh">중국어</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 텍스트 입력/출력 영역 -->
+            <div class="text-areas">
+                <div class="text-box">
+                    <label for="source-text">원본 텍스트</label>
+                    <textarea id="source-text" placeholder="번역할 텍스트를 입력하세요..."></textarea>
+                    <div class="char-count">
+                        <span id="char-count">0</span> / 500 자
+                    </div>
+                </div>
+
+                <div class="text-box">
+                    <label for="translated-text">번역 결과</label>
+                    <textarea id="translated-text" placeholder="번역 결과가 여기에 표시됩니다..." readonly></textarea>
+                    <div class="audio-player" id="audio-player" style="display: none;">
+                        <audio id="tts-audio" controls></audio>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 제어 버튼 -->
+            <div class="controls">
+                <div class="options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="use-tts" checked>
+                        <span>음성 합성 사용</span>
+                    </label>
+                </div>
+                
+                <div class="buttons">
+                    <button id="translate-btn" class="btn btn-primary">
+                        <span class="btn-text">번역하기</span>
+                        <span class="spinner" style="display: none;">⏳</span>
+                    </button>
+                    <button id="clear-btn" class="btn btn-secondary">지우기</button>
+                </div>
+            </div>
+
+            <!-- 상태 메시지 -->
+            <div id="status-message" class="status-message"></div>
+        </div>
+
+        <!-- 사용 가능한 언어 쌍 정보 -->
+        <div class="info-section">
+            <h3>📌 사용 방법</h3>
+            <ul>
+                <li>원본 언어와 번역할 언어를 선택하세요</li>
+                <li>번역할 텍스트를 입력하고 '번역하기' 버튼을 클릭하세요</li>
+                <li>'음성 합성 사용'을 체크하면 번역된 텍스트의 음성을 들을 수 있습니다</li>
+                <li>최초 번역 시 모델 다운로드로 시간이 걸릴 수 있습니다</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>
+                Powered by 
+                <a href="https://huggingface.co/transformers" target="_blank">Hugging Face Transformers</a> 
+                & 
+                <a href="https://github.com/coqui-ai/TTS" target="_blank">Coqui TTS</a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
